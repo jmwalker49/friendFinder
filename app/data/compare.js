@@ -5,11 +5,11 @@
 // But you could have it be an empty array as well.
 // ===============================================================================
 
-var friendArray = [];
+var compareArray = [];
 
 
 
 // Note how we export the array. This makes it accessible to other files using require.
-module.exports = friendArray;
+module.exports = compareArray;
 
 

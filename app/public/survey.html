@@ -45,7 +45,7 @@
                   <label for="question1">Question 1</label>
                     <h4>Your mind is always buzzing with unexplored ideas and plans.</h4>
                       <select id="q1Answer">
-                        <option value="" selected> ----- </option>
+                        <option value="0" selected> ----- </option>
                         <option value="1">1 (Strongly Disagree)</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -58,7 +58,7 @@
                     <label for="question2">Question 2</label>
                       <h4>Generally speaking, you rely more on your experience than your imagination.</h4>
                       <select id="q2Answer">
-                        <option value="" selected> ----- </option>
+                        <option value="0" selected> ----- </option>
                         <option value="1">1 (Strongly Disagree)</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -71,7 +71,7 @@
                 <label for="question3">Question 3</label>
                   <h4>You find it easy to stay relaxed and focused even when there is some pressure.</h4>
                       <select id="q3Answer">
-                        <option value="" selected> ----- </option>
+                        <option value="0" selected> ----- </option>
                         <option value="1">1 (Strongly Disagree)</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -84,7 +84,7 @@
                 <label for="question4">Question 4</label>
                   <h4>You rarely do something just out of sheer curiosity.</h4>
                       <select id="q4Answer">
-                        <option value="" selected> ----- </option>
+                        <option value="0" selected> ----- </option>
                         <option value="1">1 (Strongly Disagree)</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -97,7 +97,7 @@
                 <label for="question5">Question 5</label>
                   <h4>People can rarely upset you.</h4>
                       <select id="q5Answer">
-                        <option value="" selected> ----- </option>
+                        <option value="0" selected> ----- </option>
                         <option value="1">1 (Strongly Disagree)</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -110,7 +110,7 @@
                 <label for="question6">Question 6</label>
                   <h4>It is often difficult for you to relate to other people’s feelings.</h4>
                       <select id="q6Answer">
-                        <option value="" selected> ----- </option>
+                        <option value="0" selected> ----- </option>
                         <option value="1">1 (Strongly Disagree)</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -123,7 +123,7 @@
                 <label for="question7">Question 7</label>
                   <h4>In a discussion, truth should be more important than people’s sensitivities.</h4>
                       <select id="q7Answer">
-                        <option value="" selected> ----- </option>
+                        <option value="0" selected> ----- </option>
                         <option value="1">1 (Strongly Disagree)</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -136,7 +136,7 @@
                 <label for="question8">Question 8</label>
                   <h4>You rarely get carried away by fantasies and ideas.</h4>
                       <select id="q8Answer">
-                        <option value="" selected> ----- </option>
+                        <option value="0" selected> ----- </option>
                         <option value="1">1 (Strongly Disagree)</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -149,7 +149,7 @@
                 <label for="question9">Question 9</label>
                   <h4>You think that everyone’s views should be respected regardless of whether they are supported by facts or not.</h4>
                       <select id="q9Answer">
-                        <option value="" selected> ----- </option>
+                        <option value="0" selected> ----- </option>
                         <option value="1">1 (Strongly Disagree)</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -162,7 +162,7 @@
                 <label for="question10">Question 10</label>
                   <h4>You feel more energetic after spending time with a group of people.</h4>
                       <select id="q10Answer">
-                        <option value="" selected> ----- </option>
+                        <option value="0" selected> ----- </option>
                         <option value="1">1 (Strongly Disagree)</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -195,6 +195,8 @@
 </html>
 
 <!-- BELOW CODE IS CRITICAL. IT HANDLES HOW FORM DATA IS SENT TO OUR SERVER -->
+
+
 <script type="text/javascript">
 
     // In this code below we create the Front-end JavaScript which "POSTS" our form data to our express server.
@@ -206,9 +208,9 @@
       event.preventDefault();
 
       // Here we grab the form elements
-      var newFriend = {
-        friendName: $("#survey-name").val().trim(),
-        friendPhoto: $("#survey-photo").val().trim(),
+      var newSurvey = {
+        name: $("#survey-name").val().trim(),
+        photo: $("#survey-photo").val().trim(),
         answers: [
          $("#q1Answer").val(),
          $("#q2Answer").val(),
@@ -224,25 +226,21 @@
         
       };
 
-      console.log(newFriend);
+      var answers = newSurvey.answers
+
+      // compareArray.push(newFriend.answers)
+
+    console.log(newSurvey);
+    console.log(answers);
 
       // This line is the magic. It"s very similar to the standard ajax function we used.
       // Essentially we give it a URL, we give it the object we want to send, then we have a "callback".
       // The callback is the response of the server. In our case, we set up code in api-routes that "returns" true or false
       // depending on if a tables is available or not.
 
-      $.post("/api/friends", newFriend,
+      $.post("/api/survey", newSurvey,
         function(data) {
 
-          // If a table is available... tell user they are booked.
-          if (data) {
-            alert("Yay! You are officially booked!");
-          }
-
-          // If a table is available... tell user they on the waiting list.
-          else {
-            alert("Sorry you are on the wait list");
-          }
 
           // Clear the form when submitting
         $("#survey-name").val("")
@@ -260,6 +258,12 @@
 
         });
 
-    });
+      $.post("/api/answers", newSurvey, 
+        function(data) {
+
+
+        });
+
+   });
 
 </script>
